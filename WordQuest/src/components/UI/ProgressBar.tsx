@@ -1,32 +1,51 @@
-import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ViewStyle, DimensionValue } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { COLORS } from '../../constants/colors';
 
 interface ProgressBarProps {
   progress: number; // 0 to 1
-  style?: ViewStyle;
+  width?: DimensionValue;
+  height?: number;
   color?: string;
+  trackColor?: string;
+  style?: ViewStyle;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ progress, style, color = COLORS.ACCENT_GOLD }) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  progress,
+  width = '100%',
+  height = 8,
+  color = COLORS.ACCENT_TEAL,
+  trackColor = COLORS.BG_ELEVATED,
+  style,
+}) => {
+  const widthAnim = useSharedValue(0);
+
+  useEffect(() => {
+    widthAnim.value = withTiming(Math.max(0, Math.min(1, progress)), { duration: 500 });
+  }, [progress]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      width: `${widthAnim.value * 100}%`,
+    };
+  });
+
   return (
-    <View style={[styles.container, style]}>
-      <View style={[styles.fill, { width: `${Math.min(100, Math.max(0, progress * 100))}%`, backgroundColor: color }]} />
+    <View style={[styles.track, { width, height, backgroundColor: trackColor }, style]}>
+      <Animated.View style={[styles.fill, { backgroundColor: color }, animatedStyle]} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    height: 6,
-    backgroundColor: COLORS.BG_DARK,
-    borderRadius: 3,
+  track: {
+    borderRadius: 4,
     overflow: 'hidden',
   },
   fill: {
     height: '100%',
-    borderRadius: 3,
+    borderRadius: 4,
   },
 });
-
-export default ProgressBar;

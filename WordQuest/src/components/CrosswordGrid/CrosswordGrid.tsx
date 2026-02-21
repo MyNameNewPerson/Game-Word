@@ -1,13 +1,14 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { LevelData } from '../../types/LevelTypes';
 import { useGridScale } from '../../hooks/useGridScale';
+import { isPartOfFoundWord, cellKey } from '../../utils/gridUtils';
 import GridCell from './GridCell';
 
 interface CrosswordGridProps {
   levelData: LevelData;
   foundWords: string[];
-  revealedCells: string[]; // "row,col"
+  revealedCells: string[];
   hammerMode: boolean;
   onCellPress: (row: number, col: number) => void;
 }
@@ -17,7 +18,7 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({
   foundWords,
   revealedCells,
   hammerMode,
-  onCellPress
+  onCellPress,
 }) => {
   const { grid, wordPositions } = levelData;
   const rows = grid.length;
@@ -25,44 +26,34 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({
 
   const { cellSize, containerStyle, onLayout } = useGridScale(rows, cols);
 
-  const isPartOfFoundWord = (row: number, col: number) => {
-    for (const word of foundWords) {
-        const pos = wordPositions[word];
-        if (!pos) continue;
-        const { row: startRow, col: startCol, direction } = pos;
-
-        if (direction === 'horizontal') {
-            if (row === startRow && col >= startCol && col < startCol + word.length) {
-                return true;
-            }
-        } else {
-            if (col === startCol && row >= startRow && row < startRow + word.length) {
-                return true;
-            }
-        }
-    }
-    return false;
-  };
+  // Precompute found status for all cells to avoid heavy calculation in render
+  // Actually, GridCell is memoized, so we pass props.
+  // But isPartOfFoundWord calculation is fast enough for 7x7 grid.
 
   return (
-    <View style={[styles.container, containerStyle]} onLayout={onLayout}>
-      {grid.map((rowCells, rowIndex) => (
-        <View key={`row-${rowIndex}`} style={styles.row}>
-          {rowCells.map((letter, colIndex) => {
-            const cellKey = `${rowIndex},${colIndex}`;
-            const revealed = revealedCells.includes(cellKey);
-            const found = isPartOfFoundWord(rowIndex, colIndex);
+    <View style={containerStyle} onLayout={onLayout}>
+      {grid.map((row, r) => (
+        <View key={`row-${r}`} style={styles.row}>
+          {row.map((letter, c) => {
+            const key = cellKey(r, c);
+            const isRevealed = revealedCells.includes(key);
+            const { isFound } = isPartOfFoundWord(r, c, foundWords, wordPositions);
 
             return (
-              <GridCell
-                key={cellKey}
-                letter={letter}
-                isRevealed={revealed}
-                isPartOfFoundWord={found}
-                isHammerTarget={hammerMode && !!letter && !revealed && !found}
-                cellSize={cellSize}
-                onPress={() => onCellPress(rowIndex, colIndex)}
-              />
+              <TouchableOpacity
+                key={key}
+                activeOpacity={hammerMode && letter ? 0.8 : 1}
+                onPress={() => letter && onCellPress(r, c)}
+                disabled={!letter}
+              >
+                <GridCell
+                  letter={letter}
+                  isRevealed={isRevealed}
+                  isPartOfFoundWord={isFound}
+                  isHammerTarget={hammerMode && !!letter && !isFound && !isRevealed}
+                  cellSize={cellSize}
+                />
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -72,12 +63,9 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   row: {
     flexDirection: 'row',
   },
 });
 
-export default React.memo(CrosswordGrid);
+export default CrosswordGrid;

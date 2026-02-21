@@ -1,91 +1,52 @@
 import React from 'react';
-import { Pressable, Animated, StyleSheet, StyleProp, ViewStyle, Text, TextStyle } from 'react-native';
+import { Pressable, StyleSheet, ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { COLORS } from '../../constants/colors';
-import { FONTS, FONT_SIZES } from '../../constants/fonts';
 
 interface AnimatedButtonProps {
   onPress: () => void;
-  title?: string;
-  style?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
+  children: React.ReactNode;
+  style?: ViewStyle;
   disabled?: boolean;
-  children?: React.ReactNode;
-  scaleFactor?: number;
 }
 
-const AnimatedButton: React.FC<AnimatedButtonProps> = ({
-  onPress,
-  title,
-  style,
-  textStyle,
-  disabled = false,
-  children,
-  scaleFactor = 0.95
-}) => {
-  const scale = React.useRef(new Animated.Value(1)).current;
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+export const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onPress, children, style, disabled }) => {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
 
   const handlePressIn = () => {
     if (disabled) return;
-    Animated.spring(scale, {
-      toValue: scaleFactor,
-      useNativeDriver: true,
-      speed: 20,
-    }).start();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    scale.value = withSpring(0.95);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handlePressOut = () => {
     if (disabled) return;
-    Animated.spring(scale, {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 20,
-    }).start();
+    scale.value = withSpring(1);
   };
 
   return (
-    <Pressable
-      onPress={!disabled ? onPress : undefined}
+    <AnimatedPressable
+      onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={({ pressed }) => [
-        styles.button,
-        disabled && styles.disabled,
-        { transform: [{ scale }] },
-        style
-      ]}
+      disabled={disabled}
+      style={[style, animatedStyle, disabled && styles.disabled]}
     >
-      {children ? children : (
-        <Text style={[styles.text, textStyle]}>{title}</Text>
-      )}
-    </Pressable>
+      {children}
+    </AnimatedPressable>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: COLORS.BUTTON_PRIMARY,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 4,
-  },
   disabled: {
-    backgroundColor: COLORS.BUTTON_DISABLED,
-    opacity: 0.7,
+    opacity: 0.5,
   },
-  text: {
-    color: COLORS.TEXT_PRIMARY,
-    fontFamily: FONTS.HEADING,
-    fontSize: FONT_SIZES.MD,
-  }
 });
-
-export default AnimatedButton;

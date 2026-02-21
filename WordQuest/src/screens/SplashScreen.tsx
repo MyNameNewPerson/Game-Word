@@ -1,109 +1,98 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import { AppNavigationProp } from '../navigation/types';
 import { COLORS } from '../constants/colors';
-import { FONTS } from '../constants/fonts';
-import MysticBackground from '../components/Background/MysticBackground';
+import { FONTS, FONT_SIZES } from '../constants/fonts';
+import { SPACING } from '../constants/sizes';
 import { SaveManager } from '../services/SaveManager';
 import { LevelManager } from '../services/LevelManager';
 import { usePlayerStore } from '../store/playerStore';
-
-type SplashScreenProp = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
+import { useGameStore } from '../store/gameStore';
 
 const SplashScreen = () => {
-  const navigation = useNavigation<SplashScreenProp>();
-  const loadProgress = usePlayerStore((state) => state.loadProgress);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const dot1 = useRef(new Animated.Value(0)).current;
-  const dot2 = useRef(new Animated.Value(0)).current;
-  const dot3 = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation<AppNavigationProp>();
+  const loadProgress = usePlayerStore(state => state.loadProgress);
+  const loadSession = useGameStore(state => state.loadSession);
+
+  // Animation values
+  const logoTranslateY = useSharedValue(20);
+  const logoOpacity = useSharedValue(0);
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
+    // Start animations
+    logoTranslateY.value = withSpring(0, { damping: 10, stiffness: 100 });
+    logoOpacity.value = withTiming(1, { duration: 800 });
 
-    const animateDot = (anim: Animated.Value, delay: number) => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(anim, { toValue: 1, duration: 600, delay, useNativeDriver: true }),
-          Animated.timing(anim, { toValue: 0.3, duration: 600, useNativeDriver: true }),
-        ])
-      ).start();
-    };
-
-    animateDot(dot1, 0);
-    animateDot(dot2, 200);
-    animateDot(dot3, 400);
-
-    const init = async () => {
+    const initApp = async () => {
+      // Initialize managers and stores
       await SaveManager.initializeDefaults();
       LevelManager.preload();
       await loadProgress();
+      await loadSession();
 
-      // Minimum 2s splash
-      setTimeout(() => {
-        navigation.replace('Home');
-      }, 2000);
+      // Artificial delay for effect
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      navigation.replace('Home');
     };
 
-    init();
+    initApp();
   }, []);
 
-  return (
-    <MysticBackground>
-      <View style={styles.container}>
-        <Animated.View style={{ opacity: fadeAnim, alignItems: 'center' }}>
-          <Text style={styles.title}>WordQuest</Text>
-          <Text style={styles.subtitle}>Echoes of Secrets</Text>
-        </Animated.View>
+  const animatedLogoStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: logoTranslateY.value }],
+      opacity: logoOpacity.value,
+    };
+  });
 
-        <View style={styles.loader}>
-          <Animated.View style={[styles.dot, { opacity: dot1, transform: [{ scale: dot1 }] }]} />
-          <Animated.View style={[styles.dot, { opacity: dot2, transform: [{ scale: dot2 }] }]} />
-          <Animated.View style={[styles.dot, { opacity: dot3, transform: [{ scale: dot3 }] }]} />
-        </View>
+  return (
+    <View style={styles.container}>
+      <Animated.View style={[styles.logoContainer, animatedLogoStyle]}>
+        <Text style={styles.title}>WordQuest</Text>
+        <Text style={styles.subtitle}>Echoes of Secrets</Text>
+      </Animated.View>
+
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={COLORS.ACCENT_TEAL} />
       </View>
-    </MysticBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.BG_DARK,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: SPACING.XL,
+  },
   title: {
     fontFamily: FONTS.TITLE,
-    fontSize: 48,
+    fontSize: FONT_SIZES.DISPLAY,
     color: COLORS.TEXT_PRIMARY,
-    marginBottom: 8,
-    textShadowColor: COLORS.GLOW_GOLD,
+    textAlign: 'center',
+    textShadowColor: COLORS.ACCENT_GOLD,
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,
   },
   subtitle: {
     fontFamily: FONTS.BODY,
-    fontSize: 20,
+    fontSize: FONT_SIZES.LG,
     color: COLORS.TEXT_SECONDARY,
+    marginTop: SPACING.SM,
     letterSpacing: 2,
   },
-  loader: {
-    flexDirection: 'row',
-    marginTop: 60,
-    gap: 12,
+  loaderContainer: {
+    position: 'absolute',
+    bottom: SPACING.XXL,
   },
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: COLORS.ACCENT_TEAL,
-  }
 });
 
 export default SplashScreen;

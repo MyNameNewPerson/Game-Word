@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { LayoutChangeEvent, ViewStyle } from 'react-native';
-import { SIZES, SPACING } from '../constants/sizes';
+import { SPACING, SIZES } from '../constants/sizes';
 
 interface GridScaleResult {
   cellSize: number;
@@ -16,24 +16,27 @@ export const useGridScale = (rows: number, cols: number): GridScaleResult => {
     setContainerSize({ width, height });
   }, []);
 
-  const availableWidth = containerSize.width - SPACING.LG * 2;
-  const availableHeight = containerSize.height - SPACING.MD * 2;
+  let cellSize: number = SIZES.CELL_MIN;
 
-  let cellSize = 0;
-  if (rows > 0 && cols > 0 && availableWidth > 0 && availableHeight > 0) {
+  if (containerSize.width > 0 && containerSize.height > 0 && rows > 0 && cols > 0) {
+    const availableWidth = containerSize.width - SPACING.LG * 2; // Horizontal padding
+    const availableHeight = containerSize.height - SPACING.MD * 2; // Vertical padding
+
     const byWidth = availableWidth / cols;
     const byHeight = availableHeight / rows;
-    cellSize = Math.max(SIZES.CELL_MIN, Math.min(SIZES.CELL_MAX, byWidth, byHeight));
+
+    cellSize = Math.max(
+      SIZES.CELL_MIN,
+      Math.min(SIZES.CELL_MAX, byWidth, byHeight)
+    );
   }
 
   const containerStyle: ViewStyle = {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
   };
 
-  return {
-    cellSize,
-    containerStyle,
-    onLayout,
-  };
+  return { cellSize, containerStyle, onLayout };
 };

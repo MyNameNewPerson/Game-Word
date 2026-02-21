@@ -1,56 +1,44 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import Svg, { Defs, Pattern, Rect, Path } from 'react-native-svg';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import Svg, { Defs, Pattern, Rect, Path, Circle } from 'react-native-svg';
 import { COLORS } from '../../constants/colors';
 
 interface MysticBackgroundProps {
   children?: React.ReactNode;
+  style?: ViewStyle;
 }
 
-const MysticBackground: React.FC<MysticBackgroundProps> = ({ children }) => {
+export const MysticBackground: React.FC<MysticBackgroundProps> = ({ children, style }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.patternContainer}>
-        <Svg width="100%" height="100%">
+    <View style={[styles.container, style]}>
+      {/* Base Background */}
+      <View style={StyleSheet.absoluteFillObject}>
+        <Svg height="100%" width="100%">
           <Defs>
             <Pattern
               id="pattern"
               x="0"
               y="0"
-              width="40"
-              height="40"
+              width="60"
+              height="60"
               patternUnits="userSpaceOnUse"
+              patternTransform="rotate(45)"
             >
+              <Rect width="100%" height="100%" fill={COLORS.BG_DARK} />
+              <Circle cx="30" cy="30" r="1.5" fill={COLORS.TEXT_SECONDARY} opacity="0.1" />
               <Path
-                d="M20 0 L40 20 L20 40 L0 20 Z"
-                fill="none"
-                stroke={COLORS.GRID_BORDER}
-                strokeWidth="1"
-                opacity="0.2"
-              />
-              <Rect
-                x="19"
-                y="19"
-                width="2"
-                height="2"
-                fill={COLORS.ACCENT_GOLD}
-                opacity="0.3"
+                d="M 10 30 L 50 30 M 30 10 L 30 50"
+                stroke={COLORS.GRID_BORDER_DIM}
+                strokeWidth="0.5"
+                opacity="0.15"
               />
             </Pattern>
           </Defs>
-          <Rect
-            width="100%"
-            height="100%"
-            fill={COLORS.BG_DARK}
-          />
-          <Rect
-            width="100%"
-            height="100%"
-            fill="url(#pattern)"
-            opacity="0.04"
-          />
+          <Rect width="100%" height="100%" fill="url(#pattern)" />
         </Svg>
       </View>
+
+      {/* Content */}
       <View style={styles.content}>
         {children}
       </View>
@@ -63,14 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.BG_DARK,
   },
-  patternContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 0,
-  },
   content: {
     flex: 1,
-    zIndex: 1,
   },
 });
-
-export default MysticBackground;
