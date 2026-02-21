@@ -1,0 +1,23 @@
+export const GAME_CONFIG = {
+  COINS: {
+    START_BALANCE: 500,
+    DAILY_LOGIN_BASE: 20,
+    BONUS_WORD_REWARD: 2,
+    LEVEL_COMPLETE_BASE: 10, // multiplied by difficulty
+    LEVEL_NO_HINTS_BONUS: 10,
+    REWARDED_VIDEO_REWARD: 150,
+  },
+  HINTS: {
+    LIGHTBULB_COST: 100,
+    HAMMER_COST: 200,
+  },
+  PIGGY_BANK: {
+    MAX_AMOUNT: 1000,
+    COINS_PER_WORD: 2,
+  },
+  ADS: {
+    INTERSTITIAL_INTERVAL: 3, // levels
+    REWARDED_COOLDOWN_MINUTES: 30,
+    MIN_LEVEL_FOR_INTERSTITIAL: 5,
+  }
+} as const;

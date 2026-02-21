@@ -1,0 +1,2540 @@
+{
+  "meta": {
+    "version": "1.0",
+    "totalLevels": 30,
+    "language": "ru",
+    "generatedAt": "2026-02-21T16:27:12.127334Z"
+  },
+  "levels": {
+    "level_1": {
+      "id": 1,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_2": {
+      "id": 2,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_3": {
+      "id": 3,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_4": {
+      "id": 4,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_5": {
+      "id": 5,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_6": {
+      "id": 6,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_7": {
+      "id": 7,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_8": {
+      "id": 8,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_9": {
+      "id": 9,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "М",
+        "Н",
+        "О"
+      ],
+      "words": [
+        "НО",
+        "ОМ",
+        "ОН"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "М",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОМ": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 50
+    },
+    "level_10": {
+      "id": 10,
+      "chapter": 1,
+      "chapterName": "Пролог: Пыльный Архив",
+      "chapterTheme": {
+        "background": "archive",
+        "accentColor": "#D4AF37",
+        "storyEntry": {
+          "chapter": 1,
+          "title": "Запись №1",
+          "text": "Среди пыльных полок архива я нашёл странный дневник. Страницы покрыты символами — слова, что открывают древние тайны. Кто оставил его здесь?",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "О",
+        "Н",
+        "С"
+      ],
+      "words": [
+        "НО",
+        "ОН",
+        "ОС"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "С",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "ОС": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 90
+    },
+    "level_11": {
+      "id": 11,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "О",
+        "Н",
+        "С"
+      ],
+      "words": [
+        "НО",
+        "ОН",
+        "ОС"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "С",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "ОС": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 90
+    },
+    "level_12": {
+      "id": 12,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "О",
+        "Н",
+        "С"
+      ],
+      "words": [
+        "НО",
+        "ОН",
+        "ОС"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "С",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "ОС": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 90
+    },
+    "level_13": {
+      "id": 13,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "О",
+        "Н",
+        "С"
+      ],
+      "words": [
+        "НО",
+        "ОН",
+        "ОС"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "С",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "ОС": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 90
+    },
+    "level_14": {
+      "id": 14,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "О",
+        "Н",
+        "С"
+      ],
+      "words": [
+        "НО",
+        "ОН",
+        "ОС"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "С",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "ОС": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 90
+    },
+    "level_15": {
+      "id": 15,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "О",
+        "Н",
+        "С"
+      ],
+      "words": [
+        "НО",
+        "ОН",
+        "ОС"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Н",
+          "О",
+          null
+        ],
+        [
+          null,
+          null,
+          "С",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "НО": {
+          "row": 2,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОН": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "ОС": {
+          "row": 2,
+          "col": 2,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 1,
+      "estimatedTimeSeconds": 90
+    },
+    "level_16": {
+      "id": 16,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "П",
+        "Т",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "ПОРТ",
+        "ОРТ",
+        "РОТ",
+        "ТОР"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          "Р",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          "О",
+          null
+        ],
+        [
+          null,
+          "П",
+          "О",
+          "Р",
+          "Т",
+          null
+        ],
+        [
+          null,
+          null,
+          "Р",
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          "Т",
+          "О",
+          "Р",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "ПОРТ": {
+          "row": 3,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОРТ": {
+          "row": 3,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "РОТ": {
+          "row": 1,
+          "col": 4,
+          "direction": "vertical"
+        },
+        "ТОР": {
+          "row": 5,
+          "col": 2,
+          "direction": "horizontal"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 122
+    },
+    "level_17": {
+      "id": 17,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "И",
+        "Т",
+        "С",
+        "К",
+        "О"
+      ],
+      "words": [
+        "СТОК",
+        "КОТ",
+        "ТОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          "К",
+          null,
+          "Т",
+          null
+        ],
+        [
+          null,
+          null,
+          "О",
+          null,
+          "О",
+          null
+        ],
+        [
+          null,
+          "С",
+          "Т",
+          "О",
+          "К",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "СТОК": {
+          "row": 3,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОТ": {
+          "row": 1,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ТОК": {
+          "row": 1,
+          "col": 4,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 132
+    },
+    "level_18": {
+      "id": 18,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 110
+    },
+    "level_19": {
+      "id": 19,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "Т",
+        "К",
+        "О",
+        "С"
+      ],
+      "words": [
+        "СТОК",
+        "КОТ",
+        "ТОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          "К",
+          null,
+          "Т",
+          null
+        ],
+        [
+          null,
+          null,
+          "О",
+          null,
+          "О",
+          null
+        ],
+        [
+          null,
+          "С",
+          "Т",
+          "О",
+          "К",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "СТОК": {
+          "row": 3,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОТ": {
+          "row": 1,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ТОК": {
+          "row": 1,
+          "col": 4,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 174
+    },
+    "level_20": {
+      "id": 20,
+      "chapter": 2,
+      "chapterName": "Египетские Пески",
+      "chapterTheme": {
+        "background": "egypt",
+        "accentColor": "#C4A35A",
+        "storyEntry": {
+          "chapter": 2,
+          "title": "Запись №2",
+          "text": "Дневник привёл меня в пустыню. Под раскалённым песком — руины храма. Жрецы хранили секреты в словах: каждый символ был замком, каждое слово — ключом.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 123
+    },
+    "level_21": {
+      "id": 21,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 106
+    },
+    "level_22": {
+      "id": 22,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 95
+    },
+    "level_23": {
+      "id": 23,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 142
+    },
+    "level_24": {
+      "id": 24,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "Т",
+        "К",
+        "О",
+        "С"
+      ],
+      "words": [
+        "СТОК",
+        "КОТ",
+        "ТОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          "К",
+          null,
+          "Т",
+          null
+        ],
+        [
+          null,
+          null,
+          "О",
+          null,
+          "О",
+          null
+        ],
+        [
+          null,
+          "С",
+          "Т",
+          "О",
+          "К",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "СТОК": {
+          "row": 3,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОТ": {
+          "row": 1,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "ТОК": {
+          "row": 1,
+          "col": 4,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 114
+    },
+    "level_25": {
+      "id": 25,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 90
+    },
+    "level_26": {
+      "id": 26,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 163
+    },
+    "level_27": {
+      "id": 27,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "Е",
+        "П",
+        "Р",
+        "Л",
+        "О"
+      ],
+      "words": [
+        "ПЕРО",
+        "ПОЛЕ",
+        "РЕПО"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "П",
+          "Е",
+          "Р",
+          "О",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "Е",
+          null,
+          null
+        ],
+        [
+          null,
+          "Л",
+          null,
+          "П",
+          null,
+          null
+        ],
+        [
+          null,
+          "Е",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "ПЕРО": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ПОЛЕ": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РЕПО": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 152
+    },
+    "level_28": {
+      "id": 28,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 113
+    },
+    "level_29": {
+      "id": 29,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "А",
+        "К",
+        "Р",
+        "О"
+      ],
+      "words": [
+        "КОРА",
+        "КОР",
+        "РОК"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          "К",
+          "О",
+          "Р",
+          "А",
+          null
+        ],
+        [
+          null,
+          "О",
+          null,
+          "О",
+          null,
+          null
+        ],
+        [
+          null,
+          "Р",
+          null,
+          "К",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "КОРА": {
+          "row": 1,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "КОР": {
+          "row": 1,
+          "col": 1,
+          "direction": "vertical"
+        },
+        "РОК": {
+          "row": 1,
+          "col": 3,
+          "direction": "vertical"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 154
+    },
+    "level_30": {
+      "id": 30,
+      "chapter": 3,
+      "chapterName": "Затонувший Город",
+      "chapterTheme": {
+        "background": "underwater",
+        "accentColor": "#40A0D0",
+        "storyEntry": {
+          "chapter": 3,
+          "title": "Запись №3",
+          "text": "Я нырнул в тёмные воды. Затонувший город встретил меня тишиной. На стенах — надписи на языке, которого нет ни в одной книге. Но я учусь читать его.",
+          "unlockCondition": "complete_chapter"
+        }
+      },
+      "letters": [
+        "П",
+        "Р",
+        "И",
+        "Т",
+        "О"
+      ],
+      "words": [
+        "ПОРТ",
+        "ОРТ",
+        "РОТ",
+        "ТОР"
+      ],
+      "bonusWords": [],
+      "grid": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          "Р",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          "О",
+          null
+        ],
+        [
+          null,
+          "П",
+          "О",
+          "Р",
+          "Т",
+          null
+        ],
+        [
+          null,
+          null,
+          "Р",
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          "Т",
+          "О",
+          "Р",
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "wordPositions": {
+        "ПОРТ": {
+          "row": 3,
+          "col": 1,
+          "direction": "horizontal"
+        },
+        "ОРТ": {
+          "row": 3,
+          "col": 2,
+          "direction": "vertical"
+        },
+        "РОТ": {
+          "row": 1,
+          "col": 4,
+          "direction": "vertical"
+        },
+        "ТОР": {
+          "row": 5,
+          "col": 2,
+          "direction": "horizontal"
+        }
+      },
+      "difficulty": 2,
+      "estimatedTimeSeconds": 174
+    }
+  }
+}
