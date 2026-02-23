@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AppNavigationProp } from '../navigation/types';
@@ -8,26 +8,12 @@ import { COLORS } from '../constants/colors';
 import { FONTS, FONT_SIZES } from '../constants/fonts';
 import { SPACING, SIZES } from '../constants/sizes';
 import { usePlayerStore } from '../store/playerStore';
-import { LevelManager } from '../services/LevelManager';
-
-// Chapters data from generate_levels.py logic (hardcoded here for display as they are static)
-const CHAPTERS = [
-    { id: 1, name: "Пролог: Пыльный Архив", theme: "archive" },
-    { id: 2, name: "Египетские Пески", theme: "egypt" },
-    { id: 3, name: "Затонувший Город", theme: "underwater" },
-    { id: 4, name: "Ледяные Руины", theme: "ice" },
-    { id: 5, name: "Лесной Лабиринт", theme: "forest" },
-    { id: 6, name: "Небесная Крепость", theme: "sky" },
-    { id: 7, name: "Подземный Храм", theme: "temple" },
-    { id: 8, name: "Вулканический Остров", theme: "volcano" },
-    { id: 9, name: "Хрустальные Пещеры", theme: "crystal" },
-    { id: 10, name: "Финал: Сердце Тайны", theme: "finale" },
-];
+import { CHAPTERS } from '../constants/chapters';
 
 const ChapterSelectScreen = () => {
   const navigation = useNavigation<AppNavigationProp>();
   const completedLevels = usePlayerStore(state => state.completedLevels);
-  const currentLevel = usePlayerStore(state => state.currentLevel);
+  const currentLevel = Object.keys(completedLevels).length + 1;
 
   // Helper to calculate chapter progress
   const getChapterProgress = (chapterId: number) => {
@@ -36,12 +22,15 @@ const ChapterSelectScreen = () => {
     const endLevel = chapterId * 10;
 
     // Count how many levels in this range are completed
-    const completedCount = completedLevels.filter(lvl => lvl >= startLevel && lvl <= endLevel).length;
+    let completedCount = 0;
+    for (let i = startLevel; i <= endLevel; i++) {
+        if (completedLevels[i]) completedCount++;
+    }
 
     // Determine if unlocked
     // Chapter 1 always unlocked
     // Chapter N unlocked if all levels of N-1 are completed OR simply if we reached startLevel
-    const isUnlocked = chapterId === 1 || completedLevels.includes(startLevel - 1) || currentLevel >= startLevel;
+    const isUnlocked = chapterId === 1 || !!completedLevels[startLevel - 1] || currentLevel >= startLevel;
 
     return { completedCount, total: 10, isUnlocked, startLevel };
   };

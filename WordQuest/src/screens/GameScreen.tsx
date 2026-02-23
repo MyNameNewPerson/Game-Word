@@ -12,18 +12,17 @@ import { SPACING, SIZES } from '../constants/sizes';
 import { useGameStore } from '../store/gameStore';
 import { usePlayerStore } from '../store/playerStore';
 import { LevelManager } from '../services/LevelManager';
-import { LevelData } from '../types/LevelTypes';
+import { LevelData } from '../types';
+import { getChapterById } from '../constants/chapters';
 
 const GameScreen = () => {
   const route = useRoute<AppRouteProp<'Game'>>();
   const navigation = useNavigation<AppNavigationProp>();
   const { levelId } = route.params;
 
-  const startLevel = useGameStore(state => state.startLevel);
-  const currentLevelData = useGameStore(state => state.currentLevelData);
-  const foundWords = useGameStore(state => state.foundWords);
-  const revealedCells = useGameStore(state => state.revealedCells);
-  const hammerMode = useGameStore(state => state.hammerMode);
+  const setLevel = useGameStore(state => state.setLevel);
+  const currentLevel = useGameStore(state => state.currentLevel);
+  const session = useGameStore(state => state.session);
 
   const [isLoading, setIsLoading] = useState(true);
   const [levelData, setLevelData] = useState<LevelData | null>(null);
@@ -32,7 +31,7 @@ const GameScreen = () => {
     const data = LevelManager.getLevel(levelId);
     if (data) {
       setLevelData(data);
-      startLevel(data);
+      setLevel(data);
     } else {
       console.error(`Level ${levelId} not found!`);
       navigation.goBack();
@@ -42,7 +41,6 @@ const GameScreen = () => {
 
   const handleCellPress = (row: number, col: number) => {
     console.log(`Cell pressed: ${row}, ${col}`);
-    // Hammer logic will go here in Phase 4/6
   };
 
   if (isLoading || !levelData) {
@@ -53,6 +51,8 @@ const GameScreen = () => {
     );
   }
 
+  const chapterName = getChapterById(levelData.chapter).name;
+
   return (
     <MysticBackground style={styles.container}>
       {/* Header */}
@@ -62,7 +62,7 @@ const GameScreen = () => {
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitle}>Уровень {levelId}</Text>
-          <Text style={styles.headerSubtitle}>{levelData.chapterName}</Text>
+          <Text style={styles.headerSubtitle}>{chapterName}</Text>
         </View>
         <CoinCounter />
       </View>
@@ -73,9 +73,9 @@ const GameScreen = () => {
         <View style={styles.gridContainer}>
           <CrosswordGrid
             levelData={levelData}
-            foundWords={foundWords}
-            revealedCells={revealedCells}
-            hammerMode={hammerMode}
+            foundWords={session.foundWords}
+            revealedCells={session.revealedCells}
+            hammerMode={false}
             onCellPress={handleCellPress}
           />
         </View>

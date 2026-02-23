@@ -1,155 +1,116 @@
 import { create } from 'zustand';
-import { PlayerProgress, PlayerStats, DailyStreak } from '../types/PlayerTypes';
-import { SaveManager } from '../services/SaveManager';
-import { STORAGE_KEYS } from '../constants/storageKeys';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PlayerStore, PlayerProgress } from '../types';
 
-interface PlayerState extends PlayerProgress {
-  loadProgress: () => Promise<void>;
-  addCoins: (amount: number) => void;
-  spendCoins: (amount: number) => boolean;
-  incrementPiggyBank: (amount: number) => void;
-  resetPiggyBank: () => void;
-  setNoAds: (value: boolean) => void;
-  completeLevel: (levelId: number) => void;
-  updateStats: (partial: Partial<PlayerStats>) => void;
-  unlockAchievement: (id: string) => void;
-  updateDailyStreak: (streak: DailyStreak) => void;
-  setLastAdShownLevel: (levelId: number) => void;
+const INITIAL_PLAYER_PROGRESS: PlayerProgress = {
+  playerLevel: 1,
+  xp: 0,
+  xpForNextLevel: 100,
+  title: 'Новичок',
+};
+
+const PLAYER_TITLES = [
+  { minLevel: 1,   title: 'Новичок'        },
+  { minLevel: 11,  title: 'Ученик'         },
+  { minLevel: 21,  title: 'Знаток'         },
+  { minLevel: 31,  title: 'Архивариус'     },
+  { minLevel: 51,  title: 'Мастер слова'   },
+  { minLevel: 76,  title: 'Легенда'        },
+  { minLevel: 101, title: 'Хранитель тайн' },
+];
+
+function getTitleForLevel(level: number): string {
+  return [...PLAYER_TITLES].reverse().find(t => level >= t.minLevel)?.title ?? 'Новичок';
 }
 
-export const usePlayerStore = create<PlayerState>((set, get) => ({
-  coins: 500,
-  currentLevel: 1,
-  completedLevels: [],
-  piggyBankAmount: 0,
-  hasNoAds: false,
-  stats: {
-    totalWordsFound: 0,
-    totalBonusWords: 0,
-    totalCoinsEarned: 0,
-    totalLevelsCompleted: 0,
-    longestStreak: 0,
-    totalPlayTimeSeconds: 0,
-    levelsCompletedNoHints: 0,
-  },
-  achievements: [],
-  dailyStreak: {
-    count: 0,
-    lastPlayDate: '',
-    bestStreak: 0,
-  },
-  foundBonusWordsAll: [],
-  lastAdShownLevel: 0,
+function xpForLevel(level: number): number {
+  return Math.floor(100 * level * 1.2);
+}
 
-  loadProgress: async () => {
-    const progress = await SaveManager.get<PlayerProgress>(STORAGE_KEYS.PLAYER_PROGRESS);
-    if (progress) {
-      set(progress);
-    } else {
-        await SaveManager.initializeDefaults();
-        const defaultProgress = await SaveManager.get<PlayerProgress>(STORAGE_KEYS.PLAYER_PROGRESS);
-        if(defaultProgress) set(defaultProgress);
+export const usePlayerStore = create<PlayerStore>()(
+  persist(
+    (set, get) => ({
+      // Начальные значения
+      coins: 0,                          // 0 = признак первого запуска
+      piggyBank: 0,
+      completedLevels: {},
+      playerProgress: INITIAL_PLAYER_PROGRESS,
+      hasNoAds: false,
+      tutorialCompleted: false,
+      streakDays: 0,
+      lastPlayedDate: null,
+      dailyPuzzleLastDate: null,
+      dailyPuzzleCompleted: false,
+
+      // Монеты
+      addCoins: (n) => set(state => ({ coins: state.coins + n })),
+      spendCoins: (n) => set(state => ({ coins: Math.max(0, state.coins - n) })),
+
+      // Копилка
+      incrementPiggyBank: (n) => set(state => ({
+        piggyBank: Math.min(1000, state.piggyBank + n),
+      })),
+      resetPiggyBank: () => set({ piggyBank: 0 }),
+
+      // Флаги
+      setNoAds: (v) => set({ hasNoAds: v }),
+      setTutorialCompleted: () => set({ tutorialCompleted: true }),
+
+      // Стрик — вызывать после каждого пройденного уровня
+      updateStreak: () => {
+        const today = new Date().toISOString().split('T')[0];
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        const { lastPlayedDate, streakDays } = get();
+
+        if (lastPlayedDate === today) return; // уже играли сегодня
+
+        set({
+          streakDays: lastPlayedDate === yesterday ? streakDays + 1 : 1,
+          lastPlayedDate: today,
+        });
+      },
+
+      // Сохранение результата уровня
+      saveLevelResult: (result) => set(state => {
+        const existing = state.completedLevels[result.levelId];
+        // Сохраняем только если новый результат лучше (больше звёзд)
+        if (existing && existing.stars >= result.stars) return state;
+        return {
+          completedLevels: {
+            ...state.completedLevels,
+            [result.levelId]: result,
+          },
+        };
+      }),
+
+      // XP с автоматическим повышением уровня
+      addXP: (amount) => set(state => {
+        let { xp, playerLevel } = state.playerProgress;
+        xp += amount;
+        while (xp >= xpForLevel(playerLevel)) {
+          xp -= xpForLevel(playerLevel);
+          playerLevel += 1;
+        }
+        return {
+          playerProgress: {
+            playerLevel,
+            xp,
+            xpForNextLevel: xpForLevel(playerLevel),
+            title: getTitleForLevel(playerLevel),
+          },
+        };
+      }),
+
+      // Дейли
+      setDailyPuzzleCompleted: (date) => set({
+        dailyPuzzleLastDate: date,
+        dailyPuzzleCompleted: true,
+      }),
+    }),
+    {
+      name: 'player-storage-v1',          // v1 — при изменении схемы менять версию
+      storage: createJSONStorage(() => AsyncStorage),
     }
-  },
-
-  addCoins: (amount) => {
-    set((state) => {
-      const newCoins = state.coins + amount;
-      const newStats = {
-          ...state.stats,
-          totalCoinsEarned: state.stats.totalCoinsEarned + amount
-      };
-      const newState = { coins: newCoins, stats: newStats };
-      SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-      return newState;
-    });
-  },
-
-  spendCoins: (amount) => {
-    const { coins } = get();
-    if (coins >= amount) {
-      set((state) => {
-        const newCoins = state.coins - amount;
-        const newState = { coins: newCoins };
-        SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-        return newState;
-      });
-      return true;
-    }
-    return false;
-  },
-
-  incrementPiggyBank: (amount) => {
-    set((state) => {
-      const newAmount = Math.min(1000, state.piggyBankAmount + amount);
-      const newState = { piggyBankAmount: newAmount };
-      SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-      return newState;
-    });
-  },
-
-  resetPiggyBank: () => {
-    set((state) => {
-        const newState = { piggyBankAmount: 0 };
-        SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-        return newState;
-    });
-  },
-
-  setNoAds: (value) => {
-    set((state) => {
-      const newState = { hasNoAds: value };
-      SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-      return newState;
-    });
-  },
-
-  completeLevel: (levelId) => {
-    set((state) => {
-      const completedLevels = state.completedLevels.includes(levelId)
-        ? state.completedLevels
-        : [...state.completedLevels, levelId];
-
-      const currentLevel = Math.max(state.currentLevel, levelId + 1); // Advance to next level if simpler logic
-
-      const newState = { completedLevels, currentLevel };
-      SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-      return newState;
-    });
-  },
-
-  updateStats: (partial) => {
-    set((state) => {
-      const newStats = { ...state.stats, ...partial };
-      const newState = { stats: newStats };
-      SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-      return newState;
-    });
-  },
-
-  unlockAchievement: (id) => {
-    set((state) => {
-      if (state.achievements.includes(id)) return {};
-      const newAchievements = [...state.achievements, id];
-      const newState = { achievements: newAchievements };
-      SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, { ...state, ...newState });
-      return newState;
-    });
-  },
-
-  updateDailyStreak: (streak) => {
-      set((state) => {
-          const newState = { dailyStreak: streak };
-          SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, {...state, ...newState});
-          return newState;
-      });
-  },
-
-  setLastAdShownLevel: (levelId) => {
-      set((state) => {
-          const newState = { lastAdShownLevel: levelId };
-          SaveManager.set(STORAGE_KEYS.PLAYER_PROGRESS, {...state, ...newState});
-          return newState;
-      });
-  }
-}));
+  )
+);

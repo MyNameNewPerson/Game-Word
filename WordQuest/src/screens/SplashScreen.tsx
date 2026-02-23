@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { AppNavigationProp } from '../navigation/types';
 import { COLORS } from '../constants/colors';
@@ -8,13 +8,9 @@ import { FONTS, FONT_SIZES } from '../constants/fonts';
 import { SPACING } from '../constants/sizes';
 import { SaveManager } from '../services/SaveManager';
 import { LevelManager } from '../services/LevelManager';
-import { usePlayerStore } from '../store/playerStore';
-import { useGameStore } from '../store/gameStore';
 
 const SplashScreen = () => {
   const navigation = useNavigation<AppNavigationProp>();
-  const loadProgress = usePlayerStore(state => state.loadProgress);
-  const loadSession = useGameStore(state => state.loadSession);
 
   // Animation values
   const logoTranslateY = useSharedValue(20);
@@ -28,9 +24,7 @@ const SplashScreen = () => {
     const initApp = async () => {
       // Initialize managers and stores
       await SaveManager.initializeDefaults();
-      LevelManager.preload();
-      await loadProgress();
-      await loadSession();
+      await LevelManager.preload();
 
       // Artificial delay for effect
       await new Promise(resolve => setTimeout(resolve, 2000));
