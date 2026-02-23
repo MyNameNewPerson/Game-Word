@@ -13,7 +13,8 @@ import { usePlayerStore } from '../store/playerStore';
 
 const HomeScreen = () => {
   const navigation = useNavigation<AppNavigationProp>();
-  const currentLevel = usePlayerStore(state => state.currentLevel);
+  const completedLevels = usePlayerStore(state => state.completedLevels);
+  const currentLevel = Object.keys(completedLevels).length + 1;
 
   // Logo Animation
   const logoTranslateY = useSharedValue(0);

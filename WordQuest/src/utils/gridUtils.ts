@@ -1,4 +1,4 @@
-import { WordPosition } from '../types/LevelTypes';
+import { WordPosition } from '../types';
 
 export const cellKey = (row: number, col: number): string => `${row},${col}`;
 

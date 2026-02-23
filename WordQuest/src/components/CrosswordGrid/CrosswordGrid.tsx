@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { LevelData } from '../../types/LevelTypes';
+import { LevelData } from '../../types';
 import { useGridScale } from '../../hooks/useGridScale';
 import { isPartOfFoundWord, cellKey } from '../../utils/gridUtils';
 import GridCell from './GridCell';

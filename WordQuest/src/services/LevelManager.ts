@@ -1,57 +1,44 @@
-import { LevelData } from '../types/LevelTypes';
+import { LevelData } from '../types';
+import levelsJson from '../../assets/levels.json';
+import { loadDictionary } from './WordChecker';
 
-// Attempt to load levels.json. If it doesn't exist (yet), use a fallback.
-let levelsData: any = null;
-try {
-  levelsData = require('../../assets/levels.json');
-} catch (e) {
-  console.warn('levels.json not found, please run generator');
-  levelsData = { levels: {}, meta: { totalLevels: 0 } };
-}
+class LevelManagerClass {
+  private levels: Map<number, LevelData> = new Map();
+  private dictionary: string[] = [];
+  private loaded = false;
 
-export class LevelManager {
-  private static levelsCache: Map<number, LevelData> = new Map();
-  private static initialized = false;
+  async preload(): Promise<void> {
+    if (this.loaded) return;
 
-  private static initialize() {
-    if (this.initialized) return;
+    const data = levelsJson as { levels: LevelData[]; dictionary: string[] };
 
-    if (levelsData && levelsData.levels) {
-        Object.values(levelsData.levels).forEach((level: any) => {
-            this.levelsCache.set(level.id, level);
-        });
-    }
-    this.initialized = true;
+    // Загружаем уровни в Map для O(1) доступа
+    data.levels.forEach(lvl => this.levels.set(lvl.id, lvl));
+    this.dictionary = data.dictionary;
+
+    // Загружаем словарь в WordChecker
+    loadDictionary(this.dictionary);
+
+    this.loaded = true;
   }
 
-  static getLevel(id: number): LevelData | null {
-    this.initialize();
-    return this.levelsCache.get(id) || null;
+  getLevel(id: number): LevelData | undefined {
+    return this.levels.get(id);
   }
 
-  static getTotalLevels(): number {
-    this.initialize();
-    return this.levelsCache.size;
+  getNextLevel(currentId: number): LevelData | undefined {
+    return this.levels.get(currentId + 1);
   }
 
-  static getLevelsForChapter(chapter: number): LevelData[] {
-    this.initialize();
-    return Array.from(this.levelsCache.values())
-        .filter(l => l.chapter === chapter)
-        .sort((a, b) => a.id - b.id);
+  getLevelsForChapter(chapterId: number): LevelData[] {
+    return Array.from(this.levels.values())
+      .filter(lvl => lvl.chapter === chapterId)
+      .sort((a, b) => a.id - b.id);
   }
 
-  static getChapterForLevel(id: number): number {
-    const level = this.getLevel(id);
-    return level ? level.chapter : 1;
-  }
-
-  static isLevelUnlocked(id: number, completedLevels: number[]): boolean {
-    if (id === 1) return true;
-    return completedLevels.includes(id - 1);
-  }
-
-  static preload() {
-      this.initialize();
+  isLastLevel(levelId: number): boolean {
+    return !this.levels.has(levelId + 1);
   }
 }
+
+export const LevelManager = new LevelManagerClass();
