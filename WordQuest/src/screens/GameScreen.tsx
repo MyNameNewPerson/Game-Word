@@ -9,9 +9,11 @@ import { WordDisplay } from '../components/UI/WordDisplay';
 import { Toast, type ToastHandle } from '../components/UI/Toast';
 import { HintsBar } from '../components/GameScreen/HintsBar';
 import { LevelCompleteModal, calculateStars } from '../components/Modals/LevelCompleteModal';
+import { PiggyBankModal } from '../components/Modals/PiggyBankModal';
 import { SwipeLine, type SwipeLineHandle } from '../components/LetterCircle/SwipeLine';
 import { checkWord } from '../services/WordChecker';
 import { AudioManager } from '../services/AudioManager';
+import { AdManager } from '../services/AdManager';
 import { useGameStore } from '../store/gameStore';
 import { usePlayerStore } from '../store/playerStore';
 import { SaveManager } from '../services/SaveManager';
@@ -27,11 +29,13 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
   const session = useGameStore(s => s.session);
   const { addFoundWord, addFoundBonusWord, addRevealedCell, incrementHints, resetSession } = useGameStore();
   const { coins, spendCoins, addCoins, incrementPiggyBank, addXP, updateStreak } = usePlayerStore();
+  const hasNoAds = usePlayerStore(s => s.hasNoAds);
 
   const [currentWord, setCurrentWord] = useState('');
   const [wordDisplayState, setWordDisplayState] = useState<'typing' | 'correct' | 'error' | 'idle'>('idle');
   const [hammerMode, setHammerMode] = useState(false);
   const [isLevelComplete, setIsLevelComplete] = useState(false);
+  const [showPiggy, setShowPiggy] = useState(false);
 
   // Refs для анимаций (не вызывают ре-рендер)
   const letterCircleRef = useRef<LetterCircleHandle>(null);
@@ -219,10 +223,24 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
       setCurrentWord('');
       setWordDisplayState('idle');
       setHammerMode(false);
+      // Interstitial через 500ms после старта нового уровня
+      setTimeout(() => {
+        AdManager.tryShowInterstitial(next.id, hasNoAds);
+      }, 500);
     } else {
       navigation.navigate('ChapterSelect');
     }
-  }, [currentLevel.id, navigation]);
+  }, [currentLevel.id, hasNoAds, navigation]);
+
+  const handleWatchAd = useCallback(async () => {
+    const earned = await AdManager.showRewarded();
+    if (earned) {
+      addCoins(150);
+      toastRef.current?.show('🎬 +150 монет!', 'bonus');
+    } else {
+      toastRef.current?.show('Видео недоступно', 'info');
+    }
+  }, [addCoins]);
 
   // ─── ЗВЁЗДЫ ДЛЯ МОДАЛА ───────────────────────────────────────────────────
   const timeSeconds = Math.floor((Date.now() - session.startTime) / 1000);
@@ -265,7 +283,7 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
           piggyBank={usePlayerStore.getState().piggyBank}
           onLightbulb={handleLightbulb}
           onHammer={handleHammer}
-          onPiggyPress={() => {/* Часть E */}}
+          onPiggyPress={() => setShowPiggy(true)}
         />
 
         {/* Текущее слово */}
@@ -293,9 +311,11 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
           bonusWordsCount={foundBonusWords.length}
           stars={stars}
           onNext={handleNextLevel}
-          onWatchAd={() => {/* Часть E */}}
+          onWatchAd={handleWatchAd}
           onChapters={() => navigation.navigate('ChapterSelect')}
         />
+
+        <PiggyBankModal visible={showPiggy} onClose={() => setShowPiggy(false)} />
 
       </SafeAreaView>
     </MysticBackground>

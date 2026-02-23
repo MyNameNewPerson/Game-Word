@@ -8,6 +8,8 @@ import Animated, {
 import { MysticBackground } from '../components/Background/MysticBackground';
 import { LevelManager } from '../services/LevelManager';
 import { SaveManager } from '../services/SaveManager';
+import { AdManager } from '../services/AdManager';
+import { IAPManager } from '../services/IAPManager';
 import { COLORS, FONT_SIZES } from '../constants';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/AppNavigator';
@@ -53,6 +55,8 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
           }),
           LevelManager.preload(),
           SaveManager.initializeDefaults(),
+          AdManager.initialize(),
+          IAPManager.init(),
         ]);
       } catch (e) {
         console.error('Ошибка загрузки:', e);
