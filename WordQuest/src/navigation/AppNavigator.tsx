@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SplashScreen } from '../screens/SplashScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { ChapterSelectScreen } from '../screens/ChapterSelectScreen';
-import { GameScreen } from '../screens/GameScreen';   // создадим в Части D
+import { GameScreen } from '../screens/GameScreen';
+import { ShopScreen } from '../screens/ShopScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -28,7 +29,7 @@ export const AppNavigator = () => (
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="ChapterSelect" component={ChapterSelectScreen} />
       <Stack.Screen name="Game" component={GameScreen} />
-      {/* Shop, Settings, PiggyBank — заглушки, реализуем в Частях E и F */}
+      <Stack.Screen name="Shop" component={ShopScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );
