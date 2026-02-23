@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -10,10 +10,14 @@ import { Toast, type ToastHandle } from '../components/UI/Toast';
 import { HintsBar } from '../components/GameScreen/HintsBar';
 import { LevelCompleteModal, calculateStars } from '../components/Modals/LevelCompleteModal';
 import { PiggyBankModal } from '../components/Modals/PiggyBankModal';
+import { LevelUpModal } from '../components/Modals/LevelUpModal';
+import { TutorialOverlay } from '../components/Tutorial/TutorialOverlay';
+import { StoryModal } from '../components/Modals/StoryModal';
 import { SwipeLine, type SwipeLineHandle } from '../components/LetterCircle/SwipeLine';
 import { checkWord } from '../services/WordChecker';
 import { AudioManager } from '../services/AudioManager';
 import { AdManager } from '../services/AdManager';
+import { DailyPuzzleService } from '../services/DailyPuzzleService';
 import { useGameStore } from '../store/gameStore';
 import { usePlayerStore } from '../store/playerStore';
 import { SaveManager } from '../services/SaveManager';
@@ -30,17 +34,38 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
   const { addFoundWord, addFoundBonusWord, addRevealedCell, incrementHints, resetSession } = useGameStore();
   const { coins, spendCoins, addCoins, incrementPiggyBank, addXP, updateStreak } = usePlayerStore();
   const hasNoAds = usePlayerStore(s => s.hasNoAds);
+  const playerProgress = usePlayerStore(s => s.playerProgress);
+  const tutorialCompleted = usePlayerStore(s => s.tutorialCompleted);
 
   const [currentWord, setCurrentWord] = useState('');
   const [wordDisplayState, setWordDisplayState] = useState<'typing' | 'correct' | 'error' | 'idle'>('idle');
   const [hammerMode, setHammerMode] = useState(false);
   const [isLevelComplete, setIsLevelComplete] = useState(false);
   const [showPiggy, setShowPiggy] = useState(false);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [levelUpData, setLevelUpData] = useState<{ level: number; title: string }>({ level: 1, title: '' });
+  const [showStory, setShowStory] = useState(false);
 
   // Refs для анимаций (не вызывают ре-рендер)
   const letterCircleRef = useRef<LetterCircleHandle>(null);
   const swipeLineRef = useRef<SwipeLineHandle>(null);
   const toastRef = useRef<ToastHandle>(null);
+  const prevPlayerLevel = useRef(usePlayerStore.getState().playerProgress.playerLevel);
+
+  useEffect(() => {
+    const unsub = usePlayerStore.subscribe(state => {
+      const newLevel = state.playerProgress.playerLevel;
+      if (newLevel > prevPlayerLevel.current) {
+        prevPlayerLevel.current = newLevel;
+        setLevelUpData({
+          level: newLevel,
+          title: state.playerProgress.title,
+        });
+        setShowLevelUp(true);
+      }
+    });
+    return unsub;
+  }, []);
 
   if (!currentLevel) {
     return (
@@ -154,8 +179,20 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
       coinsEarned: total,
     });
 
+    if (currentLevel.isDailyPuzzle) {
+      const todayKey = DailyPuzzleService.getTodayDateKey();
+      usePlayerStore.getState().setDailyPuzzleCompleted(todayKey);
+      addCoins(30); // x2 монеты за дейли (30 дополнительно)
+      toastRef.current?.show('📅 Слово дня! +30 бонус 🪙', 'bonus');
+    } else {
+      const isLastLevelOfChapter = currentLevel.id % 10 === 0;
+      if (isLastLevelOfChapter) {
+        setTimeout(() => setShowStory(true), 3000);
+      }
+    }
+
     setTimeout(() => setIsLevelComplete(true), 600);
-  }, [currentLevel, session, foundBonusWords]);
+  }, [currentLevel, session, foundBonusWords, addCoins]);
 
   // ─── ОСНОВНАЯ ЛОГИКА: СЛОВО ОТПРАВЛЕНО ────────────────────────────────────
   const handleWordSubmit = useCallback((word: string) => {
@@ -253,16 +290,31 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
 
         {/* Шапка */}
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Text style={styles.backText}>← Выход</Text>
-          </TouchableOpacity>
-          <Text style={styles.levelInfo}>
-            Глава {currentLevel.chapter} · Уровень {currentLevel.id}
-          </Text>
-          <Text style={styles.coinsHeader}>🪙 {coins}</Text>
+          <View style={styles.headerTop}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Text style={styles.backText}>← Выход</Text>
+            </TouchableOpacity>
+            <Text style={styles.levelInfo}>
+              Глава {currentLevel.chapter} · Уровень {currentLevel.id}
+            </Text>
+            <Text style={styles.coinsHeader}>🪙 {coins}</Text>
+          </View>
+
+          {/* XP Bar */}
+          <View style={styles.xpBar}>
+            <View style={styles.xpBarBg}>
+              <View style={[styles.xpBarFill, {
+                flex: playerProgress.xp / playerProgress.xpForNextLevel
+              }]} />
+              <View style={{ flex: 1 - playerProgress.xp / playerProgress.xpForNextLevel }} />
+            </View>
+            <Text style={styles.xpText}>
+              Ур. {playerProgress.playerLevel} · {playerProgress.title}
+            </Text>
+          </View>
         </View>
 
         {/* Кроссворд — ~45% высоты */}
@@ -317,6 +369,23 @@ export const GameScreen: React.FC<Props> = ({ navigation }) => {
 
         <PiggyBankModal visible={showPiggy} onClose={() => setShowPiggy(false)} />
 
+        <LevelUpModal
+          visible={showLevelUp}
+          level={levelUpData.level}
+          title={levelUpData.title}
+          onClose={() => setShowLevelUp(false)}
+        />
+
+        <StoryModal
+          visible={showStory}
+          chapterId={Math.ceil(currentLevel.id / 10)}
+          onClose={() => {
+            setShowStory(false);
+          }}
+        />
+
+        <TutorialOverlay visible={currentLevel.id === 1 && !tutorialCompleted} />
+
       </SafeAreaView>
     </MysticBackground>
   );
@@ -326,11 +395,24 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   noLevel: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
+    paddingTop: SPACING.SM,
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: SPACING.LG,
-    paddingVertical: SPACING.SM,
+    marginBottom: SPACING.XS,
+  },
+  xpBar: { paddingHorizontal: SPACING.LG, paddingBottom: SPACING.XS },
+  xpBarBg: {
+    height: 4, backgroundColor: COLORS.GRID_EMPTY, borderRadius: 2,
+    flexDirection: 'row', overflow: 'hidden', marginBottom: 2,
+  },
+  xpBarFill: { backgroundColor: COLORS.ACCENT_TEAL },
+  xpText: {
+    fontFamily: 'CrimsonText-Regular', fontSize: FONT_SIZES.XS,
+    color: COLORS.TEXT_SECONDARY, textAlign: 'center',
   },
   backText: {
     fontFamily: 'CrimsonText-Regular',

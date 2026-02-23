@@ -3,9 +3,10 @@ import {
   finishTransaction, purchaseUpdatedListener, purchaseErrorListener,
   type Purchase,
 } from 'react-native-iap';
+import { EmitterSubscription } from 'react-native';
 import { usePlayerStore } from '../store/playerStore';
 
-export const PRODUCT_IDS = {
+const PRODUCT_IDS = {
   REMOVE_ADS:   'wordquest_remove_ads',    // не расходуемая покупка
   PIGGY_BANK:   'wordquest_piggy_bank',   // расходуемая — получить копилку
   COINS_500:    'wordquest_coins_500',
@@ -17,7 +18,7 @@ export const PRODUCT_IDS = {
 type ProductId = typeof PRODUCT_IDS[keyof typeof PRODUCT_IDS];
 
 // Сколько монет даёт каждая покупка
-const COINS_MAP: Partial<Record<ProductId, number>> = {
+const COINS_MAP: Partial<Record<string, number>> = {
   [PRODUCT_IDS.COINS_500]:  500,
   [PRODUCT_IDS.COINS_1200]: 1200,
   [PRODUCT_IDS.COINS_3000]: 3000,
@@ -26,24 +27,24 @@ const COINS_MAP: Partial<Record<ProductId, number>> = {
 
 class IAPManagerClass {
   private productPrices: Record<string, string> = {};
-  private purchaseListener: (() => void) | null = null;
-  private errorListener:    (() => void) | null = null;
+  private purchaseSubscription: EmitterSubscription | null = null;
+  private errorSubscription:    EmitterSubscription | null = null;
 
   async init(): Promise<void> {
     try {
       await initConnection();
 
       // Подписка на успешные покупки
-      this.purchaseListener = purchaseUpdatedListener(async (purchase: Purchase) => {
+      this.purchaseSubscription = purchaseUpdatedListener(async (purchase: Purchase) => {
         await this.handlePurchase(purchase);
         // ВАЖНО: всегда завершать транзакцию
         await finishTransaction({ purchase, isConsumable: true });
       });
 
       // Подписка на ошибки
-      this.errorListener = purchaseErrorListener((error) => {
+      this.errorSubscription = purchaseErrorListener((error) => {
         if (error.code !== 'E_USER_CANCELLED') {
-          console.log('IAP error:', error.code, error.message);
+          // console.log('IAP error:', error.code, error.message);
         }
       });
 
@@ -54,7 +55,7 @@ class IAPManagerClass {
       });
 
     } catch (e) {
-      console.log('IAP init error:', e);
+      // console.log('IAP init error:', e);
     }
   }
 
@@ -69,29 +70,30 @@ class IAPManagerClass {
       const piggyAmount = store.piggyBank;
       store.addCoins(piggyAmount);
       store.resetPiggyBank();
-    } else if (COINS_MAP[productId as ProductId]) {
-      store.addCoins(COINS_MAP[productId as ProductId]!);
+    } else if (COINS_MAP[productId]) {
+      store.addCoins(COINS_MAP[productId]!);
     }
   }
 
-  async purchase(productId: ProductId): Promise<void> {
+  async purchase(productId: string): Promise<void> {
     try {
       await requestPurchase({ skus: [productId] });
     } catch (e: any) {
       if (e.code !== 'E_USER_CANCELLED') {
-        console.log('Purchase error:', e);
+        // console.log('Purchase error:', e);
       }
     }
   }
 
-  getPrice(productId: ProductId): string {
+  getPrice(productId: string): string {
     return this.productPrices[productId] ?? '—';
   }
 
   cleanup(): void {
-    this.purchaseListener?.();
-    this.errorListener?.();
+    this.purchaseSubscription?.remove();
+    this.errorSubscription?.remove();
   }
 }
 
 export const IAPManager = new IAPManagerClass();
+export { PRODUCT_IDS };

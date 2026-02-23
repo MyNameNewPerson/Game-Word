@@ -1,37 +1,38 @@
 {
   "expo": {
-    "name": "WordQuest",
-    "slug": "WordQuest",
+    "name": "WordQuest: Echoes of Secrets",
+    "slug": "wordquest-echoes-of-secrets",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#12121A"
     },
-    "ios": {
-      "supportsTablet": true
-    },
+    "assetBundlePatterns": ["**/*"],
     "android": {
+      "package": "com.wordquest.echoes",
+      "versionCode": 1,
+      "compileSdkVersion": 35,
+      "targetSdkVersion": 35,
+      "minSdkVersion": 26,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.VIBRATE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#12121A"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
+      "expo-font",
       [
         "react-native-google-mobile-ads",
-        {
-          "androidAppId": "ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX"
-        }
+        { "androidAppId": "ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX" }
       ]
     ]
   }

@@ -17,6 +17,7 @@ export interface LevelData {
   gridCols: number;
   estimatedTimeSeconds: number;           // ожидаемое время прохождения
   difficultyScore: number;                // 1.0–5.0
+  isDailyPuzzle?: boolean;                // признак ежедневного пазла
 }
 
 // ─── ПРОГРЕСС ИГРОКА ──────────────────────────────────────────────────────
