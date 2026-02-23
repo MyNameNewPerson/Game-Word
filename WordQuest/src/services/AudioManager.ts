@@ -45,7 +45,7 @@ class AudioManagerClass {
       this.initialized = true;
     } catch (e) {
       // Звуки необязательны — игра работает без них
-      console.log('AudioManager: ошибка инициализации', e);
+      // console.log('AudioManager: ошибка инициализации', e);
     }
   }
 

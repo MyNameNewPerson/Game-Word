@@ -19,7 +19,7 @@ class AdManagerClass {
       this.preloadRewarded();
     } catch (e) {
       // AdMob недоступен — игра работает без рекламы
-      console.log('AdMob: ошибка инициализации', e);
+      // console.log('AdMob: ошибка инициализации', e);
     }
   }
 

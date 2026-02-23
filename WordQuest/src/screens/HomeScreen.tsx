@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import Animated, {
   useSharedValue, withRepeat, withTiming, withSequence,
@@ -9,6 +9,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MysticBackground } from '../components/Background/MysticBackground';
 import { usePlayerStore } from '../store/playerStore';
 import { LevelManager } from '../services/LevelManager';
+import { DailyPuzzleService } from '../services/DailyPuzzleService';
+import { Toast, ToastHandle } from '../components/UI/Toast';
 import { useGameStore } from '../store/gameStore';
 import { COLORS, FONT_SIZES, SPACING, SIZES } from '../constants';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -21,6 +23,27 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const streakDays = usePlayerStore(s => s.streakDays);
   const completedLevels = usePlayerStore(s => s.completedLevels);
   const setLevel = useGameStore(s => s.setLevel);
+
+  // Daily Puzzle Timer
+  const [secondsLeft, setSecondsLeft] = useState(DailyPuzzleService.getSecondsUntilNextPuzzle());
+  const dailyCompleted = usePlayerStore(s =>
+    DailyPuzzleService.isCompletedToday({ dailyPuzzleLastDate: s.dailyPuzzleLastDate })
+  );
+  const toastRef = useRef<ToastHandle>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsLeft(DailyPuzzleService.getSecondsUntilNextPuzzle());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  function formatTime(seconds: number): string {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
 
   // Анимация логотипа (float)
   const floatY = useSharedValue(0);
@@ -120,6 +143,34 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </Pressable>
         </Animated.View>
 
+        {/* Кнопка "Слово дня" */}
+        <TouchableOpacity
+          style={[styles.dailyButton, dailyCompleted && styles.dailyButtonCompleted]}
+          onPress={() => {
+            if (dailyCompleted) {
+              toastRef.current?.show(`Следующее через ${formatTime(secondsLeft)}`, 'info');
+              return;
+            }
+            const levelId = DailyPuzzleService.getDailyLevelId();
+            const level = LevelManager.getLevel(levelId);
+            if (level) {
+              setLevel({ ...level, isDailyPuzzle: true });
+              navigation.navigate('Game');
+            }
+          }}
+        >
+          <Text style={styles.dailyIcon}>{dailyCompleted ? '✅' : '📅'}</Text>
+          <View>
+            <Text style={styles.dailyTitle}>Слово дня</Text>
+            <Text style={styles.dailySubtitle}>
+              {dailyCompleted
+                ? `Следующее через ${formatTime(secondsLeft)}`
+                : 'x2 монеты · Доступно сейчас'
+              }
+            </Text>
+          </View>
+        </TouchableOpacity>
+
         {/* Вторичные кнопки */}
         <Animated.View style={[styles.secondaryRow, useAnimatedStyle(() => ({
           opacity: btn2Opacity.value,
@@ -148,6 +199,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
         </Animated.View>
 
+        <Toast ref={toastRef} />
       </SafeAreaView>
     </MysticBackground>
   );
@@ -198,6 +250,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.XL,
     marginBottom: SPACING.MD,
   },
+  dailyButton: {
+    flexDirection: 'row', alignItems: 'center', gap: SPACING.MD,
+    borderWidth: 1, borderColor: COLORS.ACCENT_TEAL,
+    borderRadius: SIZES.BORDER_RADIUS, paddingVertical: 12, paddingHorizontal: SPACING.LG,
+    marginHorizontal: SPACING.XL, marginBottom: SPACING.MD,
+  },
+  dailyButtonCompleted: { borderColor: COLORS.GRID_BORDER, opacity: 0.6 },
+  dailyIcon: { fontSize: 28 },
+  dailyTitle: { fontFamily: 'Cinzel-Bold', fontSize: FONT_SIZES.MD, color: COLORS.TEXT_PRIMARY },
+  dailySubtitle: { fontFamily: 'CrimsonText-Regular', fontSize: FONT_SIZES.SM, color: COLORS.TEXT_SECONDARY },
   mainButton: {
     backgroundColor: COLORS.ACCENT_GOLD,
     borderRadius: SIZES.BORDER_RADIUS,
