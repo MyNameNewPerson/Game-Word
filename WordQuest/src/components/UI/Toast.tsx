@@ -1,80 +1,61 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { StyleSheet, Text, Animated, Easing } from 'react-native';
-import { COLORS } from '../../constants/colors';
-import { FONTS, FONT_SIZES } from '../../constants/fonts';
-import { SPACING, SIZES } from '../../constants/sizes';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Animated, {
+  useSharedValue, withTiming, withSequence, useAnimatedStyle, runOnJS
+} from 'react-native-reanimated';
+import { COLORS, FONT_SIZES, SPACING } from '../../constants';
 
 export type ToastType = 'info' | 'success' | 'bonus' | 'error';
 
-export interface ToastRef {
-  show: (message: string, type?: ToastType) => void;
+export interface ToastHandle {
+  show: (message: string, type: ToastType) => void;
 }
 
-const TOAST_COLORS = {
-  info: COLORS.BG_ELEVATED,
-  success: '#27AE60', // Darker green for bg
-  bonus: '#8E44AD',   // Darker purple
-  error: '#C0392B',   // Darker red
+const TYPE_STYLES: Record<ToastType, { bg: string; color: string; icon: string }> = {
+  info:    { bg: 'rgba(42,42,62,0.95)',   color: COLORS.TEXT_PRIMARY,  icon: '✦' },
+  success: { bg: 'rgba(107,203,119,0.2)', color: COLORS.ACCENT_GREEN,  icon: '✓' },
+  bonus:   { bg: 'rgba(255,215,0,0.2)',   color: COLORS.ACCENT_GOLD,   icon: '🪙' },
+  error:   { bg: 'rgba(255,107,107,0.2)', color: COLORS.ACCENT_RED,    icon: '✗' },
 };
 
-export const Toast = forwardRef((props, ref) => {
+export const Toast = forwardRef<ToastHandle>((_, ref) => {
   const [message, setMessage] = useState('');
   const [type, setType] = useState<ToastType>('info');
-  const translateY = React.useRef(new Animated.Value(40)).current;
-  const opacity = React.useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(-60);
+  const opacity = useSharedValue(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useImperativeHandle(ref, () => ({
-    show: (msg: string, toastType: ToastType = 'info') => {
+    show(msg, t) {
+      // Отменяем предыдущий таймер если есть
+      if (timerRef.current) clearTimeout(timerRef.current);
+
       setMessage(msg);
-      setType(toastType);
+      setType(t);
 
-      // Reset
-      translateY.setValue(40);
-      opacity.setValue(0);
+      // Появление
+      translateY.value = withTiming(0, { duration: 200 });
+      opacity.value = withTiming(1, { duration: 200 });
 
-      Animated.sequence([
-        // Enter
-        Animated.parallel([
-          Animated.timing(translateY, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-            easing: Easing.out(Easing.back(1.5)),
-          }),
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-        ]),
-        // Wait
-        Animated.delay(1500),
-        // Exit
-        Animated.parallel([
-          Animated.timing(translateY, {
-            toValue: -20,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacity, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]).start();
+      // Исчезновение через 1800ms
+      timerRef.current = setTimeout(() => {
+        translateY.value = withTiming(-60, { duration: 250 });
+        opacity.value = withTiming(0, { duration: 250 });
+      }, 1800);
     },
   }));
 
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+    opacity: opacity.value,
+  }));
+
+  const { bg, color, icon } = TYPE_STYLES[type];
+
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        { backgroundColor: TOAST_COLORS[type], opacity, transform: [{ translateY }] },
-      ]}
-      pointerEvents="none"
-    >
-      <Text style={styles.text}>{message}</Text>
+    <Animated.View style={[styles.container, { backgroundColor: bg }, animStyle]}>
+      <Text style={[styles.icon, { color }]}>{icon}</Text>
+      <Text style={[styles.text, { color }]}>{message}</Text>
     </Animated.View>
   );
 });
@@ -82,22 +63,21 @@ export const Toast = forwardRef((props, ref) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 150,
+    top: 60,
     alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.SM,
     paddingHorizontal: SPACING.LG,
     paddingVertical: SPACING.SM,
-    borderRadius: SIZES.BORDER_RADIUS,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
     zIndex: 1000,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
   },
+  icon: { fontSize: FONT_SIZES.MD },
   text: {
-    fontFamily: FONTS.BODY_BOLD,
+    fontFamily: 'CrimsonText-Regular',
     fontSize: FONT_SIZES.MD,
-    color: COLORS.TEXT_PRIMARY,
-    textAlign: 'center',
   },
 });
