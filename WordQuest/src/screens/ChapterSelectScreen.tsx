@@ -1,183 +1,196 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { AppNavigationProp } from '../navigation/types';
+import React, { useCallback } from 'react';
+import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MysticBackground } from '../components/Background/MysticBackground';
-import { ProgressBar } from '../components/UI/ProgressBar';
-import { COLORS } from '../constants/colors';
-import { FONTS, FONT_SIZES } from '../constants/fonts';
-import { SPACING, SIZES } from '../constants/sizes';
+import { CHAPTERS, getChapterById } from '../constants/chapters';
 import { usePlayerStore } from '../store/playerStore';
-import { CHAPTERS } from '../constants/chapters';
+import { useGameStore } from '../store/gameStore';
+import { LevelManager } from '../services/LevelManager';
+import { COLORS, FONT_SIZES, SPACING, SIZES } from '../constants';
+import type { ChapterData } from '../types';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/AppNavigator';
 
-const ChapterSelectScreen = () => {
-  const navigation = useNavigation<AppNavigationProp>();
-  const completedLevels = usePlayerStore(state => state.completedLevels);
-  const currentLevel = Object.keys(completedLevels).length + 1;
+function getChapterProgress(chapterId: number, completedLevels: Record<number, any>) {
+  const chapter = getChapterById(chapterId);
+  const completed = chapter.levels.filter(id => completedLevels[id]).length;
+  const totalStars = chapter.levels.reduce((sum, id) => {
+    return sum + (completedLevels[id]?.stars ?? 0);
+  }, 0);
+  return { completed, total: chapter.levels.length, totalStars, maxStars: chapter.levels.length * 3 };
+}
 
-  // Helper to calculate chapter progress
-  const getChapterProgress = (chapterId: number) => {
-    // Assuming 10 levels per chapter
-    const startLevel = (chapterId - 1) * 10 + 1;
-    const endLevel = chapterId * 10;
+function isChapterUnlocked(chapterId: number, completedLevels: Record<number, any>): boolean {
+  if (chapterId === 1) return true;
+  const prevChapter = getChapterById(chapterId - 1);
+  return prevChapter.levels.every(id => completedLevels[id] !== undefined);
+}
 
-    // Count how many levels in this range are completed
-    let completedCount = 0;
-    for (let i = startLevel; i <= endLevel; i++) {
-        if (completedLevels[i]) completedCount++;
+type Props = NativeStackScreenProps<RootStackParamList, 'ChapterSelect'>;
+
+export const ChapterSelectScreen: React.FC<Props> = ({ navigation }) => {
+  const completedLevels = usePlayerStore(s => s.completedLevels);
+  const setLevel = useGameStore(s => s.setLevel);
+
+  const handlePlayChapter = useCallback((chapter: ChapterData) => {
+    // Найти первый непройденный уровень главы
+    const nextId = chapter.levels.find(id => !completedLevels[id]) ?? chapter.levels[0];
+    const level = LevelManager.getLevel(nextId);
+    if (level) {
+      setLevel(level);
+      navigation.navigate('Game');
     }
+  }, [completedLevels, setLevel, navigation]);
 
-    // Determine if unlocked
-    // Chapter 1 always unlocked
-    // Chapter N unlocked if all levels of N-1 are completed OR simply if we reached startLevel
-    const isUnlocked = chapterId === 1 || !!completedLevels[startLevel - 1] || currentLevel >= startLevel;
+  const renderChapter = useCallback(({ item }: { item: ChapterData }) => {
+    const unlocked = isChapterUnlocked(item.id, completedLevels);
+    const { completed, total, totalStars, maxStars } = getChapterProgress(item.id, completedLevels);
+    const progress = total > 0 ? completed / total : 0;
 
-    return { completedCount, total: 10, isUnlocked, startLevel };
-  };
+    return (
+      <View style={[styles.card, !unlocked && styles.cardLocked]}>
+        <Text style={styles.cardEmoji}>{item.emoji}</Text>
+        <Text style={styles.cardName}>{item.name}</Text>
+        <Text style={styles.cardChapter}>ГЛАВА {item.id}</Text>
 
-  const handlePressChapter = (chapterId: number, startLevel: number, isUnlocked: boolean) => {
-    if (!isUnlocked) return;
+        {/* Прогресс-бар */}
+        <View style={styles.progressBg}>
+          <View style={[styles.progressFill, { flex: progress }]} />
+          <View style={{ flex: 1 - progress }} />
+        </View>
+        <Text style={styles.progressText}>{completed}/{total}</Text>
 
-    // Find first unplayed level in chapter, or just go to start if all done
-    // Or go to currentLevel if it's within this chapter
-    let targetLevel = startLevel;
-    if (currentLevel >= startLevel && currentLevel < startLevel + 10) {
-        targetLevel = currentLevel;
-    }
+        {/* Звёзды */}
+        <Text style={styles.stars}>
+          {Array.from({ length: 5 }, (_, i) => {
+            const filled = Math.round((totalStars / maxStars) * 5);
+            return i < filled ? '⭐' : '☆';
+          }).join('')}
+        </Text>
 
-    navigation.navigate('Game', { levelId: targetLevel });
-  };
+        {/* Кнопка */}
+        {unlocked ? (
+          <TouchableOpacity
+            style={styles.playButton}
+            onPress={() => handlePlayChapter(item)}
+          >
+            <Text style={styles.playButtonText}>▶ ИГРАТЬ</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.lockedBadge}>
+            <Text style={styles.lockedText}>🔒 Закрыто</Text>
+          </View>
+        )}
+      </View>
+    );
+  }, [completedLevels, handlePlayChapter]);
 
   return (
-    <MysticBackground style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backText}>◀ Назад</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Главы</Text>
-        <View style={{ width: 60 }} />
-      </View>
+    <MysticBackground>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.backText}>← Назад</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Главы</Text>
+          <View style={{ width: 60 }} />
+        </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {CHAPTERS.map((chapter) => {
-          const { completedCount, total, isUnlocked, startLevel } = getChapterProgress(chapter.id);
-          const progress = completedCount / total;
-
-          return (
-            <TouchableOpacity
-              key={chapter.id}
-              style={[styles.card, !isUnlocked && styles.cardLocked]}
-              onPress={() => handlePressChapter(chapter.id, startLevel, isUnlocked)}
-              disabled={!isUnlocked}
-              activeOpacity={0.8}
-            >
-              <View style={styles.cardHeader}>
-                <Text style={[styles.chapterNum, !isUnlocked && styles.textLocked]}>
-                  Глава {chapter.id}
-                </Text>
-                {!isUnlocked && <Text style={styles.lockIcon}>🔒</Text>}
-              </View>
-
-              <Text style={[styles.chapterName, !isUnlocked && styles.textLocked]}>
-                {chapter.name}
-              </Text>
-
-              <View style={styles.progressContainer}>
-                <Text style={styles.progressText}>
-                  {completedCount} / {total}
-                </Text>
-                <ProgressBar progress={progress} height={6} color={isUnlocked ? COLORS.ACCENT_GOLD : COLORS.TEXT_DISABLED} />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+        <FlatList
+          data={CHAPTERS}
+          keyExtractor={ch => String(ch.id)}
+          renderItem={renderChapter}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.list}
+          snapToInterval={220}           // snapToInterval = ширина карточки + gap
+          decelerationRate="fast"
+          getItemLayout={(_, index) => ({ length: 220, offset: 220 * index, index })}
+        />
+      </SafeAreaView>
     </MysticBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: SIZES.HEADER_HEIGHT,
     paddingHorizontal: SPACING.LG,
-    paddingBottom: SPACING.MD,
-    backgroundColor: 'rgba(18, 18, 26, 0.8)',
+    paddingVertical: SPACING.MD,
   },
-  backButton: {
-    padding: SPACING.SM,
-  },
-  backText: {
-    fontFamily: FONTS.BODY_BOLD,
-    color: COLORS.TEXT_SECONDARY,
-    fontSize: FONT_SIZES.MD,
-  },
-  title: {
-    fontFamily: FONTS.TITLE,
-    fontSize: FONT_SIZES.XL,
-    color: COLORS.TEXT_PRIMARY,
-  },
-  scrollContent: {
-    padding: SPACING.LG,
-    paddingBottom: SPACING.XXL,
-  },
+  backText: { color: COLORS.TEXT_SECONDARY, fontSize: FONT_SIZES.MD, fontFamily: 'CrimsonText-Regular' },
+  headerTitle: { color: COLORS.TEXT_PRIMARY, fontSize: FONT_SIZES.XL, fontFamily: 'Cinzel-Bold' },
+  list: { paddingHorizontal: SPACING.LG, paddingVertical: SPACING.LG, gap: 16 },
   card: {
-    backgroundColor: COLORS.BG_CARD,
+    width: 200,
+    backgroundColor: '#1A1A28',
     borderRadius: SIZES.BORDER_RADIUS,
-    padding: SPACING.LG,
-    marginBottom: SPACING.LG,
     borderWidth: 1,
-    borderColor: COLORS.DIVIDER,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  cardLocked: {
-    backgroundColor: COLORS.BG_DARK,
-    borderColor: COLORS.DIVIDER,
-    opacity: 0.7,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    borderColor: COLORS.GRID_BORDER,
+    padding: SPACING.MD,
     alignItems: 'center',
-    marginBottom: SPACING.XS,
   },
-  chapterNum: {
-    fontFamily: FONTS.BODY_BOLD,
-    fontSize: FONT_SIZES.SM,
-    color: COLORS.ACCENT_TEAL,
-    letterSpacing: 1,
-  },
-  chapterName: {
-    fontFamily: FONTS.HEADING,
-    fontSize: FONT_SIZES.LG,
+  cardLocked: { opacity: 0.5 },
+  cardEmoji: { fontSize: 44, marginBottom: SPACING.SM },
+  cardName: {
+    fontFamily: 'Cinzel-Bold',
+    fontSize: FONT_SIZES.MD,
     color: COLORS.TEXT_PRIMARY,
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  cardChapter: {
+    fontFamily: 'CrimsonText-Regular',
+    fontSize: FONT_SIZES.SM,
+    color: COLORS.TEXT_SECONDARY,
     marginBottom: SPACING.MD,
   },
-  textLocked: {
-    color: COLORS.TEXT_DISABLED,
+  progressBg: {
+    width: '100%',
+    height: 6,
+    backgroundColor: COLORS.GRID_EMPTY,
+    borderRadius: 3,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    marginBottom: 4,
   },
-  lockIcon: {
-    fontSize: FONT_SIZES.LG,
-  },
-  progressContainer: {
-    marginTop: SPACING.XS,
-  },
+  progressFill: { backgroundColor: COLORS.ACCENT_GOLD, borderRadius: 3 },
   progressText: {
-    fontFamily: FONTS.NUMBERS,
+    fontFamily: 'CrimsonText-Regular',
     fontSize: FONT_SIZES.SM,
     color: COLORS.TEXT_SECONDARY,
-    marginBottom: SPACING.XS,
-    textAlign: 'right',
+    marginBottom: SPACING.SM,
+  },
+  stars: { fontSize: 16, marginBottom: SPACING.MD },
+  playButton: {
+    backgroundColor: COLORS.ACCENT_GOLD,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: SPACING.LG,
+    width: '100%',
+    alignItems: 'center',
+  },
+  playButtonText: {
+    fontFamily: 'Cinzel-Bold',
+    fontSize: FONT_SIZES.SM,
+    color: COLORS.BG_DARK,
+    letterSpacing: 1,
+  },
+  lockedBadge: {
+    borderWidth: 1,
+    borderColor: COLORS.GRID_BORDER,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: SPACING.LG,
+    width: '100%',
+    alignItems: 'center',
+  },
+  lockedText: {
+    fontFamily: 'CrimsonText-Regular',
+    fontSize: FONT_SIZES.SM,
+    color: COLORS.TEXT_SECONDARY,
   },
 });
-
-export default ChapterSelectScreen;

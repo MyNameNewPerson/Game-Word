@@ -1,92 +1,123 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
-import { useNavigation } from '@react-navigation/native';
-import { AppNavigationProp } from '../navigation/types';
-import { COLORS } from '../constants/colors';
-import { FONTS, FONT_SIZES } from '../constants/fonts';
-import { SPACING } from '../constants/sizes';
-import { SaveManager } from '../services/SaveManager';
+import { View, Text, StyleSheet } from 'react-native';
+import * as ExpoSplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import Animated, {
+  useSharedValue, withRepeat, withTiming, withDelay, useAnimatedStyle
+} from 'react-native-reanimated';
+import { MysticBackground } from '../components/Background/MysticBackground';
 import { LevelManager } from '../services/LevelManager';
+import { SaveManager } from '../services/SaveManager';
+import { COLORS, FONT_SIZES } from '../constants';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/AppNavigator';
 
-const SplashScreen = () => {
-  const navigation = useNavigation<AppNavigationProp>();
+// Удерживаем системный сплэш пока не загрузимся
+ExpoSplashScreen.preventAutoHideAsync();
 
-  // Animation values
-  const logoTranslateY = useSharedValue(20);
+// Компонент одной пульсирующей точки
+const PulseDot: React.FC<{ delay: number }> = ({ delay }) => {
+  const opacity = useSharedValue(1);
+
+  useEffect(() => {
+    opacity.value = withDelay(delay, withRepeat(
+      withTiming(0.3, { duration: 600 }),
+      -1, true
+    ));
+  }, []);
+
+  const style = useAnimatedStyle(() => ({ opacity: opacity.value }));
+
+  return (
+    <Animated.View style={[styles.dot, style]} />
+  );
+};
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
+
+export const SplashScreen: React.FC<Props> = ({ navigation }) => {
   const logoOpacity = useSharedValue(0);
 
   useEffect(() => {
-    // Start animations
-    logoTranslateY.value = withSpring(0, { damping: 10, stiffness: 100 });
-    logoOpacity.value = withTiming(1, { duration: 800 });
+    // Плавное появление логотипа
+    logoOpacity.value = withTiming(1, { duration: 600 });
 
-    const initApp = async () => {
-      // Initialize managers and stores
-      await SaveManager.initializeDefaults();
-      await LevelManager.preload();
+    async function load() {
+      try {
+        await Promise.all([
+          Font.loadAsync({
+            'CinzelDecorative-Regular': require('../../assets/fonts/CinzelDecorative-Regular.ttf'),
+            'Cinzel-Bold':              require('../../assets/fonts/Cinzel-Bold.ttf'),
+            'CrimsonText-Regular':      require('../../assets/fonts/CrimsonText-Regular.ttf'),
+            'CrimsonText-Italic':       require('../../assets/fonts/CrimsonText-Italic.ttf'),
+          }),
+          LevelManager.preload(),
+          SaveManager.initializeDefaults(),
+        ]);
+      } catch (e) {
+        console.error('Ошибка загрузки:', e);
+      } finally {
+        await ExpoSplashScreen.hideAsync();
+        navigation.replace('Home');
+      }
+    }
 
-      // Artificial delay for effect
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      navigation.replace('Home');
-    };
-
-    initApp();
+    load();
   }, []);
 
-  const animatedLogoStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: logoTranslateY.value }],
-      opacity: logoOpacity.value,
-    };
-  });
+  const logoStyle = useAnimatedStyle(() => ({ opacity: logoOpacity.value }));
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.logoContainer, animatedLogoStyle]}>
-        <Text style={styles.title}>WordQuest</Text>
-        <Text style={styles.subtitle}>Echoes of Secrets</Text>
-      </Animated.View>
+    <MysticBackground>
+      <View style={styles.container}>
+        <Animated.View style={[styles.logoContainer, logoStyle]}>
+          <Text style={styles.title}>✦ WordQuest ✦</Text>
+          <Text style={styles.subtitle}>Echoes of Secrets</Text>
+        </Animated.View>
 
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={COLORS.ACCENT_TEAL} />
+        <View style={styles.dotsContainer}>
+          <PulseDot delay={0} />
+          <PulseDot delay={300} />
+          <PulseDot delay={600} />
+        </View>
       </View>
-    </View>
+    </MysticBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.BG_DARK,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: SPACING.XL,
   },
   title: {
-    fontFamily: FONTS.TITLE,
+    fontFamily: 'CinzelDecorative-Regular',
     fontSize: FONT_SIZES.DISPLAY,
     color: COLORS.TEXT_PRIMARY,
-    textAlign: 'center',
     textShadowColor: COLORS.ACCENT_GOLD,
     textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
+    textShadowRadius: 20,
+    marginBottom: 8,
   },
   subtitle: {
-    fontFamily: FONTS.BODY,
+    fontFamily: 'CrimsonText-Italic',
     fontSize: FONT_SIZES.LG,
     color: COLORS.TEXT_SECONDARY,
-    marginTop: SPACING.SM,
-    letterSpacing: 2,
+    fontStyle: 'italic',
   },
-  loaderContainer: {
-    position: 'absolute',
-    bottom: SPACING.XXL,
+  dotsContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 60,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: COLORS.ACCENT_GOLD,
   },
 });
-
-export default SplashScreen;

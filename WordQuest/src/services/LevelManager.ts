@@ -10,11 +10,17 @@ class LevelManagerClass {
   async preload(): Promise<void> {
     if (this.loaded) return;
 
-    const data = levelsJson as { levels: LevelData[]; dictionary: string[] };
+    const data = levelsJson as unknown as { levels: Record<string, LevelData>; dictionary?: string[] };
 
     // Загружаем уровни в Map для O(1) доступа
-    data.levels.forEach(lvl => this.levels.set(lvl.id, lvl));
-    this.dictionary = data.dictionary;
+    Object.values(data.levels).forEach(lvl => this.levels.set(lvl.id, lvl));
+
+    if (data.dictionary) {
+      this.dictionary = data.dictionary;
+    } else {
+      console.warn('Dictionary not found in levels.json');
+      this.dictionary = [];
+    }
 
     // Загружаем словарь в WordChecker
     loadDictionary(this.dictionary);
