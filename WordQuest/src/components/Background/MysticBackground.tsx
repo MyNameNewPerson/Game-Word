@@ -1,47 +1,73 @@
-import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import Svg, { Defs, Pattern, Rect, Path, Circle } from 'react-native-svg';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import Animated, {
+  useSharedValue, withRepeat, withTiming, useAnimatedStyle, Easing
+} from 'react-native-reanimated';
 import { COLORS } from '../../constants/colors';
 
-interface MysticBackgroundProps {
-  children?: React.ReactNode;
-  style?: ViewStyle;
+const { width: SW, height: SH } = Dimensions.get('window');
+
+// Одна плавающая частица
+interface ParticleProps {
+  startX: number;
+  startY: number;
+  duration: number;    // 8000–15000ms
+  color: string;
+  size: number;        // 2–4px
 }
 
-export const MysticBackground: React.FC<MysticBackgroundProps> = ({ children, style }) => {
-  return (
-    <View style={[styles.container, style]}>
-      {/* Base Background */}
-      <View style={StyleSheet.absoluteFillObject}>
-        <Svg height="100%" width="100%">
-          <Defs>
-            <Pattern
-              id="pattern"
-              x="0"
-              y="0"
-              width="60"
-              height="60"
-              patternUnits="userSpaceOnUse"
-              patternTransform="rotate(45)"
-            >
-              <Rect width="100%" height="100%" fill={COLORS.BG_DARK} />
-              <Circle cx="30" cy="30" r="1.5" fill={COLORS.TEXT_SECONDARY} opacity="0.1" />
-              <Path
-                d="M 10 30 L 50 30 M 30 10 L 30 50"
-                stroke={COLORS.GRID_BORDER_DIM}
-                strokeWidth="0.5"
-                opacity="0.15"
-              />
-            </Pattern>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#pattern)" />
-        </Svg>
-      </View>
+const Particle: React.FC<ParticleProps> = ({ startX, startY, duration, color, size }) => {
+  const translateY = useSharedValue(0);
 
-      {/* Content */}
-      <View style={styles.content}>
-        {children}
-      </View>
+  useEffect(() => {
+    translateY.value = withRepeat(
+      withTiming(-SH - 50, { duration, easing: Easing.linear }),
+      -1,   // бесконечно
+      false
+    );
+  }, []);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }));
+
+  return (
+    <Animated.View
+      style={[{
+        position: 'absolute',
+        left: startX,
+        top: startY,
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+        backgroundColor: color,
+        opacity: 0.2,
+      }, style]}
+    />
+  );
+};
+
+// Генерируем частицы один раз — при монтировании компонента
+const PARTICLES = Array.from({ length: 15 }, (_, i) => ({
+  id: i,
+  startX: Math.random() * SW,
+  startY: Math.random() * SH,
+  duration: 8000 + Math.random() * 7000,
+  color: i % 2 === 0 ? COLORS.ACCENT_TEAL : COLORS.ACCENT_GOLD,
+  size: 2 + Math.random() * 2,
+}));
+
+interface Props {
+  children: React.ReactNode;
+}
+
+export const MysticBackground: React.FC<Props> = ({ children }) => {
+  return (
+    <View style={styles.container}>
+      {/* Частицы */}
+      {PARTICLES.map(p => <Particle key={p.id} {...p} />)}
+      {/* Контент */}
+      {children}
     </View>
   );
 };
@@ -50,8 +76,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.BG_DARK,
-  },
-  content: {
-    flex: 1,
   },
 });
