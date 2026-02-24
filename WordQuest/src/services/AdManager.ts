@@ -72,7 +72,9 @@ class AdManagerClass {
 
     try {
       this.lastShownLevel = currentLevelId;
-      await this.interstitial!.show();
+      if (this.interstitial) {
+        await this.interstitial.show();
+      }
     } catch {}
   }
 
