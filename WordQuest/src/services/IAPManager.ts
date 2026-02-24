@@ -38,7 +38,8 @@ class IAPManagerClass {
       this.purchaseSubscription = purchaseUpdatedListener(async (purchase: Purchase) => {
         await this.handlePurchase(purchase);
         // ВАЖНО: всегда завершать транзакцию
-        await finishTransaction({ purchase, isConsumable: true });
+        const isConsumable = purchase.productId !== PRODUCT_IDS.REMOVE_ADS;
+        await finishTransaction({ purchase, isConsumable });
       });
 
       // Подписка на ошибки
