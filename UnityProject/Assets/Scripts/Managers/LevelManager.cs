@@ -20,10 +20,27 @@ namespace WordQuest.Managers
 
         public void LoadLevels(string jsonContent)
         {
-            LevelContainer = JsonConvert.DeserializeObject<LevelContainer>(jsonContent);
-            if (LevelContainer == null)
+            try
             {
-                Console.WriteLine("Failed to parse level data.");
+                LevelContainer = JsonConvert.DeserializeObject<LevelContainer>(jsonContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to parse level data: {ex.Message}");
+                LevelContainer = null;
+            }
+
+            if (LevelContainer == null || LevelContainer.Levels == null)
+            {
+                if (LevelContainer == null)
+                {
+                    Console.WriteLine("Failed to parse level data.");
+                }
+                else
+                {
+                    Console.WriteLine("Level data contains no levels.");
+                }
+                SortedLevels = new List<LevelData>();
                 return;
             }
 
